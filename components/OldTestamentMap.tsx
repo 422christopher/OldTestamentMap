@@ -12,9 +12,9 @@ interface OldTestamentMapProps {
 const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chapter }) => {
   
   const isUniverse = book === 'Genesis' && chapter === 1;
-  const isGarden = book === 'Genesis' && (chapter === 2 || chapter === 3 || chapter === 4);
+  const isGarden = book === 'Genesis' && (chapter >= 2 && chapter <= 5);
   const isGenesis2 = book === 'Genesis' && chapter === 2;
-  const isExpulsionMap = book === 'Genesis' && (chapter === 3 || chapter === 4);
+  const isExpulsionMap = book === 'Genesis' && (chapter >= 3 && chapter <= 5);
 
   // Render high-quality "Universe" view for Genesis 1
   const renderUniverse = () => (
@@ -49,7 +49,7 @@ const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chap
     </div>
   );
 
-  // Render stylized "Garden of Eden" map for Genesis 2-4
+  // Render stylized "Garden of Eden" map for Genesis 2-5
   const renderCreationMap = () => (
     <div className="relative w-full h-full bg-[#ecfccb] overflow-hidden">
       {/* Width 1500 to accommodate Nod at x=1200 */}
@@ -117,8 +117,8 @@ const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chap
 
         {isExpulsionMap && (
           <g>
-            {/* Nod Label - Only in Genesis 4 */}
-            {chapter === 4 && (
+            {/* Nod Label - Only in Genesis 4 and 5 */}
+            {(chapter === 4 || chapter === 5) && (
               <g transform="translate(1200, 450)">
                 <text x="0" y="0" textAnchor="middle" className="fill-emerald-900/40 font-serif font-black text-7xl uppercase tracking-[0.3em] pointer-events-none">Nod</text>
                 <text x="0" y="60" textAnchor="middle" className="fill-stone-500 font-serif italic text-2xl tracking-widest pointer-events-none opacity-60">City of Enoch</text>
@@ -142,14 +142,18 @@ const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chap
             {/* Adam and Eve - West */}
             <g transform="translate(180, 500)">
               <circle cx="0" cy="0" r="6" fill="#000" />
-              <text x="0" y="30" textAnchor="middle" className="fill-stone-950 font-serif font-black text-sm uppercase tracking-wider">Adam and Eve</text>
+              <text x="0" y="30" textAnchor="middle" className="fill-stone-950 font-serif font-black text-sm uppercase tracking-wider">
+                {chapter === 5 ? "Descendants of Adam and Eve" : "Adam and Eve"}
+              </text>
             </g>
 
-            {/* Cain - East (Nod Area) - Only in Genesis 4 */}
-            {chapter === 4 && (
+            {/* Cain - East (Nod Area) - Only in Genesis 4 and 5 */}
+            {(chapter === 4 || chapter === 5) && (
               <g transform="translate(1200, 550)">
                 <circle cx="0" cy="0" r="6" fill="#000" />
-                <text x="0" y="30" textAnchor="middle" className="fill-stone-950 font-serif font-black text-sm uppercase tracking-wider">Cain</text>
+                <text x="0" y="30" textAnchor="middle" className="fill-stone-950 font-serif font-black text-sm uppercase tracking-wider">
+                  {chapter === 5 ? "Descendants of Cain" : "Cain"}
+                </text>
               </g>
             )}
           </g>

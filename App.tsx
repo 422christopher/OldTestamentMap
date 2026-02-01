@@ -46,8 +46,8 @@ const App: React.FC = () => {
 
   const currentBookData = OLD_TESTAMENT_BOOKS.find(b => b.name === selectedBook);
   
-  // Logic to lock the timeline at "Creation" for Genesis 1-4
-  const displayYear = (selectedBook === 'Genesis' && selectedChapter <= 4) 
+  // Logic to lock the timeline at "Creation" for Genesis 1-5
+  const displayYear = (selectedBook === 'Genesis' && selectedChapter <= 5) 
     ? 4004 
     : (context?.year || currentBookData?.baseYearBC || 4000);
 

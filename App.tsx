@@ -45,6 +45,11 @@ const App: React.FC = () => {
   }, [selectedBook, selectedChapter]);
 
   const currentBookData = OLD_TESTAMENT_BOOKS.find(b => b.name === selectedBook);
+  
+  // Logic to lock the timeline at "Creation" for Genesis 1-4
+  const displayYear = (selectedBook === 'Genesis' && selectedChapter <= 4) 
+    ? 4004 
+    : (context?.year || currentBookData?.baseYearBC || 4000);
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-stone-50">
@@ -70,7 +75,7 @@ const App: React.FC = () => {
         {/* Bottom Control Section */}
         <div className="z-40">
           <TimelineControl 
-            currentYear={context?.year || currentBookData?.baseYearBC || 4000} 
+            currentYear={displayYear} 
           />
           <ChapterTray 
             selectedBook={selectedBook} 

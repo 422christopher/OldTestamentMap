@@ -52,8 +52,8 @@ const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chap
   // Render stylized "Garden of Eden" map for Genesis 2-4
   const renderCreationMap = () => (
     <div className="relative w-full h-full bg-[#ecfccb] overflow-hidden">
-      {/* Zoomed out by using default preserveAspectRatio (meet) to show the whole map */}
-      <svg viewBox="0 0 1000 1000" className="w-full h-full">
+      {/* Width 1500 to accommodate Nod at x=1200 */}
+      <svg viewBox="0 0 1500 1000" className="w-full h-full">
         <defs>
           <filter id="glow">
             <feGaussianBlur stdDeviation="5" result="coloredBlur"/>
@@ -73,9 +73,9 @@ const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chap
           </filter>
         </defs>
         
-        {/* Full frame background fill remains large to ensure edge coverage */}
-        <rect x="-1000" y="-1000" width="3000" height="3000" fill="#ecfccb" />
-        <circle cx="500" cy="500" r="1200" fill="url(#landRadial)" />
+        {/* Full frame background fill */}
+        <rect x="-1000" y="-1000" width="5000" height="3000" fill="#ecfccb" />
+        <circle cx="650" cy="500" r="1200" fill="url(#landRadial)" />
         <radialGradient id="landRadial" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="#d9f99d" />
           <stop offset="100%" stopColor="#ecfccb" />
@@ -117,8 +117,13 @@ const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chap
 
         {isExpulsionMap && (
           <g>
-            {/* Nod Label - Restored for Genesis 3 and 4 as part of undo */}
-            <text x="1300" y="350" textAnchor="middle" className="fill-emerald-900/40 font-serif font-black text-7xl uppercase tracking-[0.3em] pointer-events-none">Nod</text>
+            {/* Nod Label - Only in Genesis 4 */}
+            {chapter === 4 && (
+              <g transform="translate(1200, 450)">
+                <text x="0" y="0" textAnchor="middle" className="fill-emerald-900/40 font-serif font-black text-7xl uppercase tracking-[0.3em] pointer-events-none">Nod</text>
+                <text x="0" y="60" textAnchor="middle" className="fill-stone-500 font-serif italic text-2xl tracking-widest pointer-events-none opacity-60">City of Enoch</text>
+              </g>
+            )}
 
             {/* The Cherubim */}
             <g transform="translate(800, 430)" className="animate-pulse">
@@ -142,7 +147,7 @@ const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chap
 
             {/* Cain - East (Nod Area) - Only in Genesis 4 */}
             {chapter === 4 && (
-              <g transform="translate(880, 550)">
+              <g transform="translate(1200, 550)">
                 <circle cx="0" cy="0" r="6" fill="#000" />
                 <text x="0" y="30" textAnchor="middle" className="fill-stone-950 font-serif font-black text-sm uppercase tracking-wider">Cain</text>
               </g>

@@ -4,15 +4,18 @@ import { ChapterContext } from "../types";
 
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
-// Simple in-memory cache to store results for the current session
-const contextCache: Map<string, ChapterContext> = new Map();
-
+// Simple localStorage-backed cache to store results across sessions
 export async function fetchChapterContext(book: string, chapter: number): Promise<ChapterContext> {
-  const cacheKey = `${book}-${chapter}`;
+  const cacheKey = `scripture-atlas-cache-${book}-${chapter}`;
   
-  // Check if we already have this context cached
-  if (contextCache.has(cacheKey)) {
-    return contextCache.get(cacheKey)!;
+  // Check if we already have this context cached in localStorage
+  const cachedData = localStorage.getItem(cacheKey);
+  if (cachedData) {
+    try {
+      return JSON.parse(cachedData) as ChapterContext;
+    } catch (error) {
+      console.error("Error parsing cached context:", error);
+    }
   }
 
   try {
@@ -52,8 +55,12 @@ export async function fetchChapterContext(book: string, chapter: number): Promis
 
     const data = JSON.parse(response.text) as ChapterContext;
     
-    // Save to cache before returning
-    contextCache.set(cacheKey, data);
+    // Save to localStorage before returning
+    try {
+      localStorage.setItem(cacheKey, JSON.stringify(data));
+    } catch (e) {
+      console.warn("Could not save to localStorage (possibly quota exceeded):", e);
+    }
     
     return data;
   } catch (error) {

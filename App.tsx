@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import OldTestamentMap from './components/OldTestamentMap';
 import TimelineControl from './components/TimelineControl';
@@ -26,11 +25,8 @@ const App: React.FC = () => {
     let isMounted = true;
 
     const loadContext = async () => {
-      // Small delay to prevent flickering on ultra-fast cached responses
       setLoading(true);
-      
       const data = await fetchChapterContext(selectedBook, selectedChapter);
-      
       if (isMounted) {
         setContext(data);
         setLoading(false);
@@ -38,18 +34,21 @@ const App: React.FC = () => {
     };
 
     loadContext();
-
-    return () => {
-      isMounted = false;
-    };
+    return () => { isMounted = false; };
   }, [selectedBook, selectedChapter]);
 
   const currentBookData = OLD_TESTAMENT_BOOKS.find(b => b.name === selectedBook);
   
-  // Logic to lock the timeline at "Creation" for Genesis 1-5
-  const displayYear = (selectedBook === 'Genesis' && selectedChapter <= 5) 
-    ? 4004 
-    : (context?.year || currentBookData?.baseYearBC || 4000);
+  // Custom Timeline Logic
+  let displayYear = context?.year || currentBookData?.baseYearBC || 4000;
+  
+  if (selectedBook === 'Genesis') {
+    if (selectedChapter <= 5) {
+      displayYear = 4004; // Locked at Creation
+    } else if (selectedChapter >= 6 && selectedChapter <= 10) {
+      displayYear = 3000; // Special Year for Noah in the middle of the gap
+    }
+  }
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-stone-50">
@@ -72,7 +71,6 @@ const App: React.FC = () => {
           />
         </div>
 
-        {/* Bottom Control Section */}
         <div className="z-40">
           <TimelineControl 
             currentYear={displayYear} 

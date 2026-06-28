@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 interface TimelineControlProps {
@@ -14,19 +13,28 @@ const TimelineControl: React.FC<TimelineControlProps> = ({ currentYear }) => {
    */
   
   let progress = 0;
+  let label = '';
   let isCreation = false;
+  let isNoah = false;
 
-  // If the current year is essentially "pre-history" or explicitly Genesis 1-11 territory
   if (currentYear >= 4000) {
-    progress = 0; // Exactly at the start for Creation
+    progress = 0;
     isCreation = true;
-  } else if (currentYear > 2000) {
-    // Somewhere in the dashed gap (Genesis 2-11)
+    label = 'Creation';
+  } else if (currentYear === 3000) {
+    // Special sentinel for Noah transition in the dotted gap
     progress = 7.5;
+    isNoah = true;
+    label = 'Noah';
+  } else if (currentYear > 2000) {
+    // Other gap logic
+    progress = 7.5;
+    label = `${currentYear} BC`;
   } else {
-    // Linear scale for historical period: 2000 BC to 400 BC (1600 year span)
+    // Linear scale for historical period: 2000 BC to 400 BC
     const historicalProgress = (2000 - currentYear) / 1600;
     progress = 15 + (historicalProgress * 85);
+    label = `${currentYear} BC`;
   }
 
   return (
@@ -63,12 +71,16 @@ const TimelineControl: React.FC<TimelineControlProps> = ({ currentYear }) => {
           </div>
         </div>
 
-        {/* LABELS ROW - Structured to have static dates closer to the line and above the active highlight */}
+        {/* LABELS ROW */}
         <div className="flex w-full text-[10px] font-black tracking-widest text-stone-400 uppercase relative h-14">
           
-          {/* STATIC MARKERS - Closer to the line (top-0) */}
+          {/* STATIC MARKERS */}
           <div className={`absolute left-0 top-0 transition-opacity duration-300 ${isCreation ? 'opacity-0' : 'opacity-100'}`}>
             Creation
+          </div>
+
+          <div className={`absolute left-[7.5%] -translate-x-1/2 top-0 transition-opacity duration-300 ${isNoah ? 'opacity-0' : 'opacity-100'}`}>
+            Noah
           </div>
           
           <div className="absolute left-[15%] -translate-x-1/2 text-stone-500 top-0">
@@ -79,19 +91,18 @@ const TimelineControl: React.FC<TimelineControlProps> = ({ currentYear }) => {
             400 BC
           </div>
 
-          {/* HIGHLIGHTED CURRENT POSITION - Below the static markers (top-6) and larger */}
+          {/* HIGHLIGHTED CURRENT POSITION */}
           <div 
-            className="absolute text-amber-600 text-[18px] font-black transition-all duration-1000 ease-in-out whitespace-nowrap leading-none top-6"
+            className={`absolute text-amber-600 font-black transition-all duration-1000 ease-in-out whitespace-nowrap leading-none top-6 ${isNoah ? 'text-[24px] scale-110' : 'text-[18px]'}`}
             style={{ 
               left: `${progress}%`, 
               transform: progress === 0 ? 'translateX(0)' : progress === 100 ? 'translateX(-100%)' : 'translateX(-50%)' 
             }}
           >
-            {isCreation ? 'Creation' : `${currentYear} BC`}
+            {label}
           </div>
         </div>
 
-        {/* Explanation line */}
         <div className="mt-2 text-[9px] text-stone-400 font-serif italic uppercase tracking-wider opacity-60">
           All dates are approximate
         </div>

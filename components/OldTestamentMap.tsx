@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { MapFeature } from '../types';
 
@@ -11,10 +10,79 @@ interface OldTestamentMapProps {
 
 const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chapter }) => {
   
+  const isGenesis10 = book === 'Genesis' && chapter === 10;
+  const isGenesis11 = book === 'Genesis' && chapter === 11;
   const isUniverse = book === 'Genesis' && chapter === 1;
-  const isGarden = book === 'Genesis' && (chapter >= 2 && chapter <= 5);
+  const isFlood = book === 'Genesis' && chapter === 7;
+  const isArarat = book === 'Genesis' && chapter === 8;
+  const isNations = book === 'Genesis' && chapter === 9;
+  const isGarden = book === 'Genesis' && (chapter >= 2 && chapter <= 6);
   const isGenesis2 = book === 'Genesis' && chapter === 2;
-  const isExpulsionMap = book === 'Genesis' && (chapter >= 3 && chapter <= 5);
+  const isExpulsionMap = book === 'Genesis' && (chapter >= 3 && chapter <= 6);
+
+  // Render "Table of Nations" view for Genesis 10
+  const renderGenesis10Map = () => {
+    const locations = [
+      { name: 'Gomorrah', x: 100, y: 80 },
+      { name: 'Sodom', x: 130, y: 170 },
+      { name: 'Gaza', x: 120, y: 290 },
+      { name: 'Admah', x: 105, y: 410 },
+      { name: 'Lasha', x: 105, y: 530 },
+      { name: 'Gerar', x: 230, y: 330 },
+      { name: 'Zeboim', x: 220, y: 450 },
+      { name: 'Sidon', x: 380, y: 320 },
+      { name: 'Rehoboth', x: 500, y: 150 },
+      { name: 'Nineveh', x: 530, y: 260 },
+      { name: 'Resen', x: 500, y: 380 },
+      { name: 'Calah', x: 530, y: 500 },
+      { name: 'Shinar', x: 680, y: 410 },
+    ];
+
+    return (
+      <div className="relative w-full h-full bg-[#f1f5f9] overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(148,163,184,0.1)_0%,transparent_100%)]" />
+        <svg viewBox="0 0 1000 800" className="w-full h-full relative z-10">
+          {/* Locations */}
+          {locations.map((loc, i) => (
+            <g key={i} transform={`translate(${loc.x}, ${loc.y})`}>
+              {/* Stylized Settlement Icon (Miniature) */}
+              <g transform="scale(0.25) translate(0, -30)">
+                <path d="M -30 40 L 0 0 L 30 40 Z" fill="#92400e" />
+                <rect x="-20" y="40" width="40" height="30" fill="#b45309" />
+              </g>
+              <text 
+                x="0" 
+                y="30" 
+                textAnchor="middle" 
+                className="fill-stone-800 font-serif font-black text-[10px] uppercase tracking-widest drop-shadow-sm"
+              >
+                {loc.name}
+              </text>
+            </g>
+          ))}
+
+          {/* Mount Sephar - Stylized Mountain Silhouette */}
+          <g transform="translate(880, 440)">
+            <path d="M -70 50 L 0 -50 L 70 50 Z" fill="#94a3b8" opacity="0.8" />
+            <path d="M -50 50 L 20 -30 L 90 50 Z" fill="#64748b" opacity="0.6" />
+            <text 
+              x="10" 
+              y="85" 
+              textAnchor="middle" 
+              className="fill-stone-900 font-serif font-black text-[12px] uppercase tracking-[0.2em] drop-shadow-sm"
+            >
+              Mount Sephar
+            </text>
+          </g>
+        </svg>
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <h1 className="text-stone-800/5 font-serif font-black text-[120px] uppercase tracking-[0.2em] select-none">
+            {chapter === 11 ? "TOWER OF BABEL" : "TABLE OF NATIONS"}
+          </h1>
+        </div>
+      </div>
+    );
+  };
 
   // Render high-quality "Universe" view for Genesis 1
   const renderUniverse = () => (
@@ -49,10 +117,124 @@ const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chap
     </div>
   );
 
-  // Render stylized "Garden of Eden" map for Genesis 2-5
+  // Render "The Flood" view for Genesis 7
+  const renderFloodMap = () => (
+    <div className="relative w-full h-full bg-[#1e3a8a] overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.3)_0%,transparent_100%)] animate-pulse" />
+      <svg viewBox="0 0 1500 1000" className="w-full h-full relative z-10">
+        <g transform="translate(750, 500)">
+          <circle cx="0" cy="0" r="8" fill="#fff" className="shadow-lg" />
+          <text x="0" y="40" textAnchor="middle" className="fill-blue-50 font-serif font-black text-xl uppercase tracking-widest drop-shadow-md">
+            Noah and the Ark
+          </text>
+          <g transform="translate(0, -75)">
+             <path d="M-60,0 L60,0 L50,35 L-50,35 Z" fill="#4a3728" />
+             <rect x="-35" y="-20" width="70" height="20" fill="#5d4037" />
+             <rect x="-20" y="-35" width="40" height="15" fill="#795548" />
+          </g>
+        </g>
+        <g opacity="0.1">
+          <path d="M0,200 Q375,150 750,200 T1500,200" fill="none" stroke="#fff" strokeWidth="2" className="animate-[pulse_4s_infinite]" />
+          <path d="M0,500 Q375,550 750,500 T1500,500" fill="none" stroke="#fff" strokeWidth="2" className="animate-[pulse_6s_infinite]" />
+          <path d="M0,800 Q375,750 750,800 T1500,800" fill="none" stroke="#fff" strokeWidth="2" className="animate-[pulse_5s_infinite]" />
+        </g>
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <h1 className="text-blue-200/20 font-serif font-black text-[200px] uppercase tracking-[0.2em] select-none">
+          THE FLOOD
+        </h1>
+      </div>
+    </div>
+  );
+
+  // Render "The Ararat" view for Genesis 8
+  const renderAraratMap = () => (
+    <div className="relative w-full h-full bg-[#fef3c7] overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.1)_0%,transparent_100%)]" />
+      <svg viewBox="0 0 1500 1000" className="w-full h-full relative z-10">
+        <g transform="translate(750, 500)">
+          {/* Mountain Silhouette */}
+          <path d="M -200 150 L 0 -150 L 200 150 Z" fill="#d1d5db" opacity="0.8" />
+          <path d="M -150 150 L 50 -100 L 250 150 Z" fill="#9ca3af" opacity="0.6" />
+          
+          <circle cx="0" cy="0" r="8" fill="#000" />
+          <text x="0" y="55" textAnchor="middle" className="fill-stone-800 font-serif font-black text-xl uppercase tracking-widest drop-shadow-sm">
+            Noah and the Ark
+          </text>
+          <text x="0" y="85" textAnchor="middle" className="fill-stone-500 font-serif italic text-sm uppercase tracking-widest">
+            Mount Ararat
+          </text>
+          
+          <g transform="translate(0, -75)">
+             {/* Stylized Ark Icon */}
+             <path d="M-60,0 L60,0 L50,35 L-50,35 Z" fill="#4a3728" />
+             <rect x="-35" y="-20" width="70" height="20" fill="#5d4037" />
+             <rect x="-20" y="-35" width="40" height="15" fill="#795548" />
+          </g>
+        </g>
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <h1 className="text-stone-800/5 font-serif font-black text-[160px] uppercase tracking-[0.2em] select-none">
+          NEW WORLD
+        </h1>
+      </div>
+    </div>
+  );
+
+  // Render "The Nations" view for Genesis 9
+  const renderNationsMap = () => (
+    <div className="relative w-full h-full bg-[#dcfce7] overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(34,197,94,0.05)_0%,transparent_100%)]" />
+      <svg viewBox="0 0 1500 1000" className="w-full h-full relative z-10">
+        <defs>
+          <linearGradient id="rainbowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+             <stop offset="0%" stopColor="#ef4444" />
+             <stop offset="16.6%" stopColor="#f97316" />
+             <stop offset="33.3%" stopColor="#facc15" />
+             <stop offset="50%" stopColor="#22c55e" />
+             <stop offset="66.6%" stopColor="#3b82f6" />
+             <stop offset="83.3%" stopColor="#6366f1" />
+             <stop offset="100%" stopColor="#a855f7" />
+          </linearGradient>
+        </defs>
+
+        {/* Rainbow - The Covenant Arc */}
+        <path d="M 100 800 Q 750 -300 1400 800" fill="none" stroke="url(#rainbowGrad)" strokeWidth="40" strokeOpacity="0.3" strokeLinecap="round" />
+
+        <g transform="translate(750, 500)">
+          {/* Noah and his Descendants - Centered */}
+          <g className="animate-[pulse_10s_infinite]">
+            <circle cx="0" cy="0" r="10" fill="#000" />
+            <circle cx="-15" cy="15" r="5" fill="#000" opacity="0.6" />
+            <circle cx="15" cy="15" r="5" fill="#000" opacity="0.6" />
+          </g>
+          
+          <text x="0" y="60" textAnchor="middle" className="fill-stone-900 font-serif font-black text-2xl uppercase tracking-[0.2em] drop-shadow-sm">
+            Noah and his Descendants
+          </text>
+          <text x="0" y="90" textAnchor="middle" className="fill-stone-500 font-serif italic text-sm uppercase tracking-widest">
+            The Covenant Rainbow
+          </text>
+          
+          <g transform="translate(0, -90)">
+             {/* Stylized Home/Settlement Icon */}
+             <path d="M -30 40 L 0 0 L 30 40 Z" fill="#92400e" />
+             <rect x="-20" y="40" width="40" height="30" fill="#b45309" />
+             <rect x="-5" y="55" width="10" height="15" fill="#451a03" />
+          </g>
+        </g>
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <h1 className="text-stone-800/5 font-serif font-black text-[140px] uppercase tracking-[0.3em] select-none">
+          COVENANT
+        </h1>
+      </div>
+    </div>
+  );
+
+  // Render stylized "Garden of Eden" map for Genesis 2-6
   const renderCreationMap = () => (
     <div className="relative w-full h-full bg-[#ecfccb] overflow-hidden">
-      {/* Width 1500 to accommodate Nod at x=1200 */}
       <svg viewBox="0 0 1500 1000" className="w-full h-full">
         <defs>
           <filter id="glow">
@@ -71,15 +253,14 @@ const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chap
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
+          <radialGradient id="landRadial" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#d9f99d" />
+            <stop offset="100%" stopColor="#ecfccb" />
+          </radialGradient>
         </defs>
         
-        {/* Full frame background fill */}
         <rect x="-1000" y="-1000" width="5000" height="3000" fill="#ecfccb" />
         <circle cx="650" cy="500" r="1200" fill="url(#landRadial)" />
-        <radialGradient id="landRadial" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#d9f99d" />
-          <stop offset="100%" stopColor="#ecfccb" />
-        </radialGradient>
 
         {/* Rivers */}
         <g fill="none" stroke="#60a5fa" strokeLinecap="round">
@@ -117,8 +298,8 @@ const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chap
 
         {isExpulsionMap && (
           <g>
-            {/* Nod Label - Only in Genesis 4 and 5 */}
-            {(chapter === 4 || chapter === 5) && (
+            {/* Nod Label - Genesis 4, 5, 6 */}
+            {(chapter >= 4 && chapter <= 6) && (
               <g transform="translate(1200, 450)">
                 <text x="0" y="0" textAnchor="middle" className="fill-emerald-900/40 font-serif font-black text-7xl uppercase tracking-[0.3em] pointer-events-none">Nod</text>
                 <text x="0" y="60" textAnchor="middle" className="fill-stone-500 font-serif italic text-2xl tracking-widest pointer-events-none opacity-60">City of Enoch</text>
@@ -127,7 +308,7 @@ const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chap
 
             {/* The Cherubim */}
             <g transform="translate(800, 430)" className="animate-pulse">
-              <text x="0" y="0" textAnchor="middle" style={{ fontSize: '48px' }} className="select-none">👼</text>
+              <text x="0" y="0" textAnchor="middle" style={{ fontSize: '48px' }} className="select-none text-4xl">👼</text>
               <text x="0" y="40" textAnchor="middle" className="fill-amber-900 font-serif font-black text-[10px] uppercase tracking-[0.2em]">Cherubim</text>
             </g>
 
@@ -139,20 +320,28 @@ const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chap
               <text x="0" y="45" textAnchor="middle" className="fill-orange-700 font-serif font-bold text-[10px] uppercase tracking-widest">Flaming Sword</text>
             </g>
 
-            {/* Adam and Eve - West */}
+            {/* Inhabitants - West */}
             <g transform="translate(180, 500)">
               <circle cx="0" cy="0" r="6" fill="#000" />
               <text x="0" y="30" textAnchor="middle" className="fill-stone-950 font-serif font-black text-sm uppercase tracking-wider">
-                {chapter === 5 ? "Descendants of Adam and Eve" : "Adam and Eve"}
+                {chapter === 6 ? "Noah and the Ark" : chapter === 5 ? "Descendants of Adam and Eve" : "Adam and Eve"}
               </text>
+              {chapter === 6 && (
+                <g transform="translate(0, -65)">
+                   {/* Stylized Ark Icon */}
+                   <path d="M-45,0 L45,0 L35,25 L-35,25 Z" fill="#5d4037" />
+                   <rect x="-25" y="-15" width="50" height="15" fill="#795548" />
+                   <rect x="-15" y="-25" width="30" height="10" fill="#a1887f" />
+                </g>
+              )}
             </g>
 
-            {/* Cain - East (Nod Area) - Only in Genesis 4 and 5 */}
-            {(chapter === 4 || chapter === 5) && (
+            {/* Inhabitants - East (Nod Area) */}
+            {(chapter >= 4 && chapter <= 6) && (
               <g transform="translate(1200, 550)">
                 <circle cx="0" cy="0" r="6" fill="#000" />
                 <text x="0" y="30" textAnchor="middle" className="fill-stone-950 font-serif font-black text-sm uppercase tracking-wider">
-                  {chapter === 5 ? "Descendants of Cain" : "Cain"}
+                  {chapter >= 5 ? "Descendants of Cain" : "Cain"}
                 </text>
               </g>
             )}
@@ -180,7 +369,7 @@ const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chap
   return (
     <div className="relative w-full h-full overflow-hidden bg-stone-200">
       <div className="absolute inset-0 transition-opacity duration-1000">
-        {isUniverse ? renderUniverse() : isGarden ? renderCreationMap() : renderHistoricalMap()}
+        {isUniverse ? renderUniverse() : isFlood ? renderFloodMap() : isArarat ? renderAraratMap() : isNations ? renderNationsMap() : (isGenesis10 || isGenesis11) ? renderGenesis10Map() : isGarden ? renderCreationMap() : renderHistoricalMap()}
       </div>
     </div>
   );

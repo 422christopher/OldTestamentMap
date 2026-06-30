@@ -68,6 +68,8 @@ const App: React.FC = () => {
             chapter={selectedChapter}
             mapType={currentBookData?.mapType || 'ancient-near-east'} 
             locations={context?.locations || []} 
+            layoutType={context?.layoutType}
+            mapImageUrl={context?.mapImageUrl}
           />
         </div>
 

@@ -1,79 +1,26 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
 import { ChapterContext } from "../types";
+import { GENESIS_CHAPTERS } from "../data/genesis";
 
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
-// Simple localStorage-backed cache to store results across sessions
-const HARDCODED_CHAPTERS: Record<string, ChapterContext> = {
-  "Genesis-1": {
-    year: 4004,
-    summary: "The creation of the heavens, the earth, and all living things.",
-    locations: []
-  },
-  "Genesis-2": {
-    year: 4000,
-    summary: "The Garden of Eden, the creation of man and woman, and the two trees.",
-    locations: []
-  },
-  "Genesis-3": {
-    year: 4000,
-    summary: "The temptation, the fall of mankind, and expulsion from the Garden of Eden.",
-    locations: []
-  },
-  "Genesis-4": {
-    year: 3800,
-    summary: "Cain and Abel, the first murder, and the establishment of the land of Nod.",
-    locations: []
-  },
-  "Genesis-5": {
-    year: 3500,
-    summary: "The genealogy from Adam to Noah, tracking the long-lived early generations.",
-    locations: []
-  },
-  "Genesis-6": {
-    year: 3000,
-    summary: "The corruption of the earth and God's instruction to Noah to build the Ark.",
-    locations: []
-  },
-  "Genesis-7": {
-    year: 3000,
-    summary: "The great Flood waters cover the entire earth; Noah and the Ark are preserved.",
-    locations: []
-  },
-  "Genesis-8": {
-    year: 3000,
-    summary: "The floodwaters recede and the Ark rests on the mountains of Ararat.",
-    locations: []
-  },
-  "Genesis-9": {
-    year: 3000,
-    summary: "God's covenant with Noah, symbolized by the rainbow, and the scattering of his sons.",
-    locations: []
-  },
-  "Genesis-10": {
-    year: 3000,
-    summary: "The Table of Nations, outlining the descendants of Shem, Ham, and Japheth across the ancient lands.",
-    locations: []
-  },
-  "Genesis-11": {
-    year: 2200,
-    summary: "The building and confusion of the Tower of Babel, and the genealogy of Shem to Abram.",
-    locations: []
-  }
+// Map of book name to static modular chapters data
+const STATIC_BOOK_DATA: Record<string, Record<number, ChapterContext>> = {
+  "Genesis": GENESIS_CHAPTERS,
 };
 
 export async function fetchChapterContext(book: string, chapter: number): Promise<ChapterContext> {
   const cacheKey = `scripture-atlas-cache-${book}-${chapter}`;
-  const hardcodedKey = `${book}-${chapter}`;
 
   // Immediate fast-path for customized maps to load with zero delay
-  if (HARDCODED_CHAPTERS[hardcodedKey]) {
-    return HARDCODED_CHAPTERS[hardcodedKey];
+  if (STATIC_BOOK_DATA[book] && STATIC_BOOK_DATA[book][chapter]) {
+    return STATIC_BOOK_DATA[book][chapter];
   }
   
   // Check if we already have this context cached in localStorage
   const cachedData = localStorage.getItem(cacheKey);
+
   if (cachedData) {
     try {
       return JSON.parse(cachedData) as ChapterContext;

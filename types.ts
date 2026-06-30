@@ -25,4 +25,6 @@ export interface ChapterContext {
   year: number;
   summary: string;
   locations: MapFeature[];
+  layoutType?: string;
+  mapImageUrl?: string;
 }

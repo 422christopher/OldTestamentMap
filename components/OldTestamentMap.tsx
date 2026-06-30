@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapFeature } from '../types';
 
 interface OldTestamentMapProps {
@@ -6,78 +6,147 @@ interface OldTestamentMapProps {
   locations: MapFeature[];
   book: string;
   chapter: number;
+  layoutType?: string;
+  mapImageUrl?: string;
 }
 
-const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chapter }) => {
-  
-  const isGenesis10 = book === 'Genesis' && chapter === 10;
-  const isGenesis11 = book === 'Genesis' && chapter === 11;
-  const isUniverse = book === 'Genesis' && chapter === 1;
-  const isFlood = book === 'Genesis' && chapter === 7;
-  const isArarat = book === 'Genesis' && chapter === 8;
-  const isNations = book === 'Genesis' && chapter === 9;
-  const isGarden = book === 'Genesis' && (chapter >= 2 && chapter <= 6);
-  const isGenesis2 = book === 'Genesis' && chapter === 2;
-  const isExpulsionMap = book === 'Genesis' && (chapter >= 3 && chapter <= 6);
+const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chapter, layoutType, mapImageUrl }) => {
+  const [imageLoadError, setImageLoadError] = useState(false);
 
-  // Render "Table of Nations" view for Genesis 10
+  useEffect(() => {
+    setImageLoadError(false);
+  }, [book, chapter, mapImageUrl]);
+  
+  const isGenesis10 = layoutType === 'genesis10';
+  const isGenesis11 = layoutType === 'genesis11';
+  const isUniverse = layoutType === 'universe';
+  const isFlood = layoutType === 'flood';
+  const isArarat = layoutType === 'ararat';
+  const isNations = layoutType === 'nations';
+  const isGarden = layoutType === 'garden-eden-creation' || layoutType === 'garden-eden-expulsion';
+  const isGenesis2 = layoutType === 'garden-eden-creation';
+  const isExpulsionMap = layoutType === 'garden-eden-expulsion';
+
+  // Render "Table of Nations" view for Genesis 10 & 11
   const renderGenesis10Map = () => {
-    const locations = [
-      { name: 'Gomorrah', x: 100, y: 80 },
-      { name: 'Sodom', x: 130, y: 170 },
-      { name: 'Gaza', x: 120, y: 290 },
-      { name: 'Admah', x: 105, y: 410 },
-      { name: 'Lasha', x: 105, y: 530 },
-      { name: 'Gerar', x: 230, y: 330 },
-      { name: 'Zeboim', x: 220, y: 450 },
-      { name: 'Sidon', x: 380, y: 320 },
-      { name: 'Rehoboth', x: 500, y: 150 },
-      { name: 'Nineveh', x: 530, y: 260 },
-      { name: 'Resen', x: 500, y: 380 },
-      { name: 'Calah', x: 530, y: 500 },
-      { name: 'Shinar', x: 680, y: 410 },
+    const places = [
+      { name: 'Sidon', x: 326, y: 101, labelAlign: 'left', dx: -55 },
+      { name: 'Gaza', x: 313, y: 138, labelAlign: 'left', dx: -50 },
+      { name: 'Gerar', x: 329, y: 143, labelAlign: 'left', dx: -52 },
+      { name: 'Sodom', x: 346, y: 121, labelAlign: 'right', dx: 12 },
+      { name: 'Gomorrah', x: 347, y: 143, labelAlign: 'right', dx: 12 },
+      { name: 'Admah', x: 347, y: 166, labelAlign: 'right', dx: 12 },
+      { name: 'Zeboim', x: 347, y: 196, labelAlign: 'right', dx: 12 },
+      { name: 'Lasha', x: 339, y: 221, labelAlign: 'right', dx: 12 },
+      { name: 'Rehoboth', x: 476, y: 35, labelAlign: 'left', dx: -75 },
+      { name: 'Nineveh', x: 492, y: 65, labelAlign: 'right', dx: 12 },
+      { name: 'Resen', x: 492, y: 80, labelAlign: 'left', dx: -52 },
+      { name: 'Calah', x: 499, y: 90, labelAlign: 'right', dx: 12 },
+      { name: 'Babel, in land of Shinar', x: 521, y: 135, labelAlign: 'right', dx: 12 },
+      { name: 'Mesha', x: 498, y: 670, labelAlign: 'right', dx: 12 }
     ];
 
-    return (
-      <div className="relative w-full h-full bg-[#f1f5f9] overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(148,163,184,0.1)_0%,transparent_100%)]" />
-        <svg viewBox="0 0 1000 800" className="w-full h-full relative z-10">
-          {/* Locations */}
-          {locations.map((loc, i) => (
-            <g key={i} transform={`translate(${loc.x}, ${loc.y})`}>
-              {/* Stylized Settlement Icon (Miniature) */}
-              <g transform="scale(0.25) translate(0, -30)">
-                <path d="M -30 40 L 0 0 L 30 40 Z" fill="#92400e" />
-                <rect x="-20" y="40" width="40" height="30" fill="#b45309" />
-              </g>
-              <text 
-                x="0" 
-                y="30" 
-                textAnchor="middle" 
-                className="fill-stone-800 font-serif font-black text-[10px] uppercase tracking-widest drop-shadow-sm"
-              >
-                {loc.name}
-              </text>
-            </g>
-          ))}
+    const sepharX = 670;
+    const sepharY = 510;
+    const sepharBoxWidth = 200;
+    const sepharBoxHeight = 85;
+    const sepharBoxX = sepharX - sepharBoxWidth / 2;
+    const sepharBoxY = sepharY + 25;
 
-          {/* Mount Sephar - Stylized Mountain Silhouette */}
-          <g transform="translate(880, 440)">
-            <path d="M -70 50 L 0 -50 L 70 50 Z" fill="#94a3b8" opacity="0.8" />
-            <path d="M -50 50 L 20 -30 L 90 50 Z" fill="#64748b" opacity="0.6" />
-            <text 
-              x="10" 
-              y="85" 
-              textAnchor="middle" 
-              className="fill-stone-900 font-serif font-black text-[12px] uppercase tracking-[0.2em] drop-shadow-sm"
-            >
+    return (
+      <div className="relative w-full h-full bg-[#0b1329] overflow-hidden">
+        <svg viewBox="0 0 1000 750" className="w-full h-full relative z-10">
+          {/* Base Satellite Image Map */}
+          <image 
+            href="https://upload.wikimedia.org/wikipedia/commons/e/e0/Arabian_Peninsula_satellite_orthographic.jpg"
+            x="0" 
+            y="-120" 
+            width="1000" 
+            height="1000"
+            preserveAspectRatio="xMidYMid slice"
+          />
+
+          {/* Locations */}
+          {places.map((place, i) => {
+            const textWidth = place.name.length * 7.5 + 10;
+            const boxX = place.labelAlign === 'left' ? place.x + place.dx - 2 : place.x + place.dx;
+            const boxY = place.y - 10;
+
+            return (
+              <g key={i}>
+                {/* Red circle with black border */}
+                <circle 
+                  cx={place.x} 
+                  cy={place.y} 
+                  r="6" 
+                  fill="#ff0000" 
+                  stroke="#000000" 
+                  strokeWidth="1.5" 
+                />
+                {/* White label background */}
+                <rect 
+                  x={boxX} 
+                  y={boxY} 
+                  width={textWidth} 
+                  height={18} 
+                  fill="#ffffff" 
+                  stroke="#000000" 
+                  strokeWidth="0.5" 
+                  rx="1"
+                />
+                {/* Label text */}
+                <text 
+                  x={boxX + 5} 
+                  y={place.y + 3} 
+                  fill="#000000" 
+                  className="font-sans text-[11px] font-bold select-none"
+                >
+                  {place.name}
+                </text>
+              </g>
+            );
+          })}
+
+          {/* Mount Sephar - Stylized Mountain Silhouette and description */}
+          <g>
+            {/* Red Triangle */}
+            <polygon 
+              points={`${sepharX},${sepharY - 35} ${sepharX - 30},${sepharY + 15} ${sepharX + 30},${sepharY + 15}`} 
+              fill="#ff0000" 
+              stroke="#000000"
+              strokeWidth="0.5"
+            />
+            {/* White box with black border */}
+            <rect 
+              x={sepharBoxX} 
+              y={sepharBoxY} 
+              width={sepharBoxWidth} 
+              height={sepharBoxHeight} 
+              fill="#ffffff" 
+              stroke="#000000" 
+              strokeWidth="0.5" 
+              rx="2"
+            />
+            {/* Multi-line Text */}
+            <text x={sepharX} y={sepharBoxY + 18} textAnchor="middle" fill="#000000" className="font-sans text-[14px] font-bold select-none">
               Mount Sephar
+            </text>
+            <text x={sepharX} y={sepharBoxY + 36} textAnchor="middle" fill="#000000" className="font-sans text-[11px] font-semibold select-none">
+              Probably the same mountain
+            </text>
+            <text x={sepharX} y={sepharBoxY + 52} textAnchor="middle" fill="#000000" className="font-sans text-[11px] font-semibold select-none">
+              Nephi climbed before
+            </text>
+            <text x={sepharX} y={sepharBoxY + 68} textAnchor="middle" fill="#000000" className="font-sans text-[11px] font-semibold select-none">
+              building a boat
             </text>
           </g>
         </svg>
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <h1 className="text-stone-800/5 font-serif font-black text-[120px] uppercase tracking-[0.2em] select-none">
-            {chapter === 11 ? "TOWER OF BABEL" : "TABLE OF NATIONS"}
+        
+        {/* Semi-transparent Overlay for Title */}
+        <div className="absolute top-4 left-4 z-20 bg-stone-900/80 backdrop-blur-sm px-4 py-2 rounded-md border border-stone-700">
+          <h1 className="text-amber-100 font-serif font-black text-lg uppercase tracking-wider">
+            {chapter === 11 ? "Genesis 11: Tower of Babel" : "Genesis 10: Table of Nations"}
           </h1>
         </div>
       </div>
@@ -351,6 +420,30 @@ const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chap
     </div>
   );
 
+  const renderCustomImageMap = () => {
+    const isGen10or11 = isGenesis10 || isGenesis11;
+    return (
+      <div className="relative w-full h-full bg-[#0b1329] overflow-hidden flex items-center justify-center">
+        <img 
+          src={mapImageUrl} 
+          alt={`${book} ${chapter} Map`}
+          className={isGen10or11
+            ? "absolute top-0 left-1/2 -translate-x-1/2 h-[140%] w-auto max-w-none select-none"
+            : "h-full w-auto max-w-none select-none"}
+          onError={() => setImageLoadError(true)}
+        />
+        {/* Semi-transparent Overlay for Title */}
+        {!isGen10or11 && (
+          <div className="absolute top-4 left-4 z-20 bg-stone-900/80 backdrop-blur-sm px-4 py-2 rounded-md border border-stone-700">
+            <h1 className="text-amber-100 font-serif font-black text-lg uppercase tracking-wider">
+              {book} {chapter} Map
+            </h1>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const renderHistoricalMap = () => (
     <svg viewBox="0 0 1000 600" className="w-full h-full bg-[#fdf6e3]">
       <path d="M0 200 Q 150 150, 200 0 L 0 0 Z" fill="#93c5fd" />
@@ -369,7 +462,7 @@ const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chap
   return (
     <div className="relative w-full h-full overflow-hidden bg-stone-200">
       <div className="absolute inset-0 transition-opacity duration-1000">
-        {isUniverse ? renderUniverse() : isFlood ? renderFloodMap() : isArarat ? renderAraratMap() : isNations ? renderNationsMap() : (isGenesis10 || isGenesis11) ? renderGenesis10Map() : isGarden ? renderCreationMap() : renderHistoricalMap()}
+        {(mapImageUrl && !imageLoadError) ? renderCustomImageMap() : (isUniverse ? renderUniverse() : isFlood ? renderFloodMap() : isArarat ? renderAraratMap() : isNations ? renderNationsMap() : (isGenesis10 || isGenesis11) ? renderGenesis10Map() : isGarden ? renderCreationMap() : renderHistoricalMap())}
       </div>
     </div>
   );

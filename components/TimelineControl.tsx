@@ -104,7 +104,7 @@ const TimelineControl: React.FC<TimelineControlProps> = ({ currentYear }) => {
         </div>
 
         <div className="mt-2 text-[9px] text-stone-400 font-serif italic uppercase tracking-wider opacity-60">
-          All dates are approximate
+          All dates and locations are approximates
         </div>
       </div>
     </div>

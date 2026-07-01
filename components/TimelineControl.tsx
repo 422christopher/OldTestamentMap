@@ -16,6 +16,8 @@ const TimelineControl: React.FC<TimelineControlProps> = ({ currentYear }) => {
   let label = '';
   let isCreation = false;
   let isNoah = false;
+  const is2000 = currentYear === 2000;
+  const is400 = currentYear === 400;
 
   if (currentYear >= 4000) {
     progress = 0;
@@ -64,7 +66,7 @@ const TimelineControl: React.FC<TimelineControlProps> = ({ currentYear }) => {
 
           {/* INDICATOR DOT */}
           <div 
-            className="absolute z-30 transition-all duration-1000 ease-in-out flex flex-col items-center"
+            className="absolute z-30 transition-all duration-1000 ease-in-out flex flex-col items-center -translate-x-1/2"
             style={{ left: `${progress}%` }}
           >
             <div className="w-4 h-4 bg-amber-600 rounded-full border-2 border-white shadow-md"></div>
@@ -83,11 +85,11 @@ const TimelineControl: React.FC<TimelineControlProps> = ({ currentYear }) => {
             Noah
           </div>
           
-          <div className="absolute left-[15%] -translate-x-1/2 text-stone-500 top-0">
+          <div className={`absolute left-[15%] -translate-x-1/2 text-stone-500 top-0 transition-opacity duration-300 ${is2000 ? 'opacity-0' : 'opacity-100'}`}>
             2000 BC
           </div>
           
-          <div className="absolute right-0 text-right top-0">
+          <div className={`absolute right-0 text-right top-0 transition-opacity duration-300 ${is400 ? 'opacity-0' : 'opacity-100'}`}>
             400 BC
           </div>
 

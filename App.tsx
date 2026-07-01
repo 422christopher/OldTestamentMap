@@ -45,7 +45,7 @@ const App: React.FC = () => {
   if (selectedBook === 'Genesis') {
     if (selectedChapter <= 5) {
       displayYear = 4004; // Locked at Creation
-    } else if (selectedChapter >= 6 && selectedChapter <= 10) {
+    } else if (selectedChapter >= 6 && selectedChapter <= 10.5) {
       displayYear = 3000; // Special Year for Noah in the middle of the gap
     }
   }

@@ -74,10 +74,31 @@ export const GENESIS_CHAPTERS: Record<number, ChapterContext> = {
       { id: "shinar", name: 'Shinar', x: 680, y: 410, type: "city" },
     ],
     layoutType: "genesis10",
-    mapImageUrl: "/Gen10_out.png"
+    mapImageUrl: "/Gen10_out.svg"
+  },
+  10.5: {
+    year: 3000,
+    summary: "A detailed zoomed-in view of the Table of Nations map highlighting key biblical locations.",
+    locations: [
+      { id: "gomorrah", name: 'Gomorrah', x: 100, y: 80, type: "city" },
+      { id: "sodom", name: 'Sodom', x: 130, y: 170, type: "city" },
+      { id: "gaza", name: 'Gaza', x: 120, y: 290, type: "city" },
+      { id: "admah", name: 'Admah', x: 105, y: 410, type: "city" },
+      { id: "lasha", name: 'Lasha', x: 105, y: 530, type: "city" },
+      { id: "gerar", name: 'Gerar', x: 230, y: 330, type: "city" },
+      { id: "zeboim", name: 'Zeboim', x: 220, y: 450, type: "city" },
+      { id: "sidon", name: 'Sidon', x: 380, y: 320, type: "city" },
+      { id: "rehoboth", name: 'Rehoboth', x: 500, y: 150, type: "city" },
+      { id: "nineveh", name: 'Nineveh', x: 530, y: 260, type: "city" },
+      { id: "resen", name: 'Resen', x: 500, y: 380, type: "city" },
+      { id: "calah", name: 'Calah', x: 530, y: 500, type: "city" },
+      { id: "shinar", name: 'Shinar', x: 680, y: 410, type: "city" },
+    ],
+    layoutType: "genesis10_zoom",
+    mapImageUrl: "/Gen10_in.svg"
   },
   11: {
-    year: 2200,
+    year: 2000,
     summary: "The building and confusion of the Tower of Babel, and the genealogy of Shem to Abram.",
     locations: [
       { id: "gomorrah", name: 'Gomorrah', x: 100, y: 80, type: "city" },
@@ -95,6 +116,6 @@ export const GENESIS_CHAPTERS: Record<number, ChapterContext> = {
       { id: "shinar", name: 'Shinar', x: 680, y: 410, type: "city" },
     ],
     layoutType: "genesis11",
-    mapImageUrl: "/genesis11.png"
+    mapImageUrl: "/Gen11.svg"
   }
 };

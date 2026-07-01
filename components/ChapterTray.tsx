@@ -46,6 +46,9 @@ const ChapterTray: React.FC<ChapterTrayProps> = ({
 
     for (let i = start; i <= currentBook.chapters; i++) {
       clumps.push({ start: i, end: i, label: `${i}` });
+      if (selectedBook === 'Genesis' && i === 10) {
+        clumps.push({ start: 10.5, end: 10.5, label: '10 Zoomed In' });
+      }
     }
 
     return clumps;

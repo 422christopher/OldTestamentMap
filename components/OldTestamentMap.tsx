@@ -12,9 +12,11 @@ interface OldTestamentMapProps {
 
 const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chapter, layoutType, mapImageUrl }) => {
   const [imageLoadError, setImageLoadError] = useState(false);
+  const [cacheBuster, setCacheBuster] = useState('');
 
   useEffect(() => {
     setImageLoadError(false);
+    setCacheBuster(Date.now().toString());
   }, [book, chapter, mapImageUrl]);
   
   const isGenesis10 = layoutType === 'genesis10';
@@ -142,13 +144,6 @@ const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chap
             </text>
           </g>
         </svg>
-        
-        {/* Semi-transparent Overlay for Title */}
-        <div className="absolute top-4 left-4 z-20 bg-stone-900/80 backdrop-blur-sm px-4 py-2 rounded-md border border-stone-700">
-          <h1 className="text-amber-100 font-serif font-black text-lg uppercase tracking-wider">
-            {chapter === 11 ? "Genesis 11: Tower of Babel" : "Genesis 10: Table of Nations"}
-          </h1>
-        </div>
       </div>
     );
   };
@@ -423,24 +418,18 @@ const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chap
   const renderCustomImageMap = () => {
     const isGenesis10Zoom = layoutType === 'genesis10_zoom';
     const isGen10or11orZoom = isGenesis10 || isGenesis11 || isGenesis10Zoom;
+    const srcWithBuster = mapImageUrl 
+      ? `${mapImageUrl}${mapImageUrl.includes('?') ? '&' : '?'}cb=${cacheBuster}`
+      : '';
+
     return (
       <div className="relative w-full h-full bg-[#0b1329] overflow-hidden flex items-center justify-center">
         <img 
-          src={mapImageUrl} 
+          src={srcWithBuster} 
           alt={`${book} ${chapter} Map`}
-          className={isGen10or11orZoom
-            ? "absolute top-0 left-1/2 -translate-x-1/2 h-[140%] w-auto max-w-none select-none"
-            : "h-full w-auto max-w-none select-none"}
+          className="absolute top-0 left-1/2 -translate-x-1/2 h-[140%] w-auto max-w-none select-none"
           onError={() => setImageLoadError(true)}
         />
-        {/* Semi-transparent Overlay for Title */}
-        {!isGen10or11orZoom && (
-          <div className="absolute top-4 left-4 z-20 bg-stone-900/80 backdrop-blur-sm px-4 py-2 rounded-md border border-stone-700">
-            <h1 className="text-amber-100 font-serif font-black text-lg uppercase tracking-wider">
-              {book} {chapter} Map
-            </h1>
-          </div>
-        )}
       </div>
     );
   };

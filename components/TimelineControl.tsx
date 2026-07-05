@@ -25,12 +25,12 @@ const TimelineControl: React.FC<TimelineControlProps> = ({ currentYear }) => {
     label = 'Creation';
   } else if (currentYear === 3000) {
     // Special sentinel for Noah transition in the dotted gap
-    progress = 7.5;
+    progress = 9.5;
     isNoah = true;
     label = 'Noah';
   } else if (currentYear > 2000) {
     // Other gap logic
-    progress = 7.5;
+    progress = 9.5;
     label = `${currentYear} BC`;
   } else {
     // Linear scale for historical period: 2000 BC to 400 BC
@@ -81,7 +81,7 @@ const TimelineControl: React.FC<TimelineControlProps> = ({ currentYear }) => {
             Creation
           </div>
 
-          <div className={`absolute left-[7.5%] -translate-x-1/2 top-0 transition-opacity duration-300 ${isNoah ? 'opacity-0' : 'opacity-100'}`}>
+          <div className={`absolute left-[9.5%] -translate-x-1/2 top-0 transition-opacity duration-300 ${isNoah ? 'opacity-0' : 'opacity-100'}`}>
             Noah
           </div>
           

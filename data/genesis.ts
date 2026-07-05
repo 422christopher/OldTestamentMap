@@ -98,7 +98,7 @@ export const GENESIS_CHAPTERS: Record<number, ChapterContext> = {
     mapImageUrl: "/Gen10_in.svg"
   },
   11: {
-    year: 2000,
+    year: 1925,
     summary: "The building and confusion of the Tower of Babel, and the genealogy of Shem to Abram.",
     locations: [
       { id: "gomorrah", name: 'Gomorrah', x: 100, y: 80, type: "city" },
@@ -117,5 +117,18 @@ export const GENESIS_CHAPTERS: Record<number, ChapterContext> = {
     ],
     layoutType: "genesis11",
     mapImageUrl: "/Gen11.svg"
+  },
+  12: {
+    year: 1925,
+    summary: "God calls Abram, promising to make him a great nation, and Abram journeys from Haran to Canaan and Egypt.",
+    locations: [
+      { id: "haran", name: "Haran", x: 60, y: 20, type: "city" },
+      { id: "shechem", name: "Shechem", x: 45, y: 65, type: "city" },
+      { id: "bethel", name: "Bethel", x: 44, y: 72, type: "city" },
+      { id: "negev", name: "Negev", x: 42, y: 85, type: "region" },
+      { id: "egypt", name: "Egypt", x: 20, y: 90, type: "region" }
+    ],
+    layoutType: "genesis12",
+    mapImageUrl: "/Gen12.svg"
   }
 };

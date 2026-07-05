@@ -18,6 +18,7 @@ const ChapterTray: React.FC<ChapterTrayProps> = ({
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   
   const currentBook = OLD_TESTAMENT_BOOKS.find(b => b.name === selectedBook);
   if (!currentBook) return null;
@@ -32,6 +33,20 @@ const ChapterTray: React.FC<ChapterTrayProps> = ({
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Smoothly scroll the selected chapter into view
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      const activeBtn = scrollContainerRef.current.querySelector('.active-chapter-btn');
+      if (activeBtn) {
+        activeBtn.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center'
+        });
+      }
+    }
+  }, [selectedChapter, selectedBook]);
 
   const getClumps = (): ChapterRange[] => {
     const clumps: ChapterRange[] = [];
@@ -106,7 +121,7 @@ const ChapterTray: React.FC<ChapterTrayProps> = ({
         <div className="w-[1px] h-6 bg-stone-200 mx-2" />
 
         {/* Chapters Scrolling Area */}
-        <div className="flex-1 overflow-x-auto">
+        <div ref={scrollContainerRef} className="flex-1 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <div className="flex items-center gap-2 min-w-max pb-1">
             {clumps.map((clump) => {
               const isActive = selectedChapter >= clump.start && selectedChapter <= clump.end;
@@ -116,7 +131,7 @@ const ChapterTray: React.FC<ChapterTrayProps> = ({
                   onClick={() => onSelectChapter(clump.start)}
                   className={`px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
                     isActive
-                      ? 'bg-amber-600 text-white shadow-md scale-105'
+                      ? 'bg-amber-600 text-white shadow-md scale-105 active-chapter-btn'
                       : 'bg-stone-100 text-stone-500 hover:bg-stone-200'
                   }`}
                 >

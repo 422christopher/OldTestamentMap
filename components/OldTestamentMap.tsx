@@ -56,8 +56,8 @@ const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chap
     const sepharBoxY = sepharY + 25;
 
     return (
-      <div className="relative w-full h-full bg-[#0b1329] overflow-hidden">
-        <svg viewBox="0 0 1000 750" className="w-full h-full relative z-10">
+      <div className="relative w-full h-full bg-[#0b1329] overflow-hidden flex items-center justify-center">
+        <svg viewBox="0 0 1000 750" className="h-full w-auto max-w-full mx-auto block relative z-10" preserveAspectRatio="xMidYMid meet">
           {/* Base Satellite Image Map */}
           <image 
             href="https://upload.wikimedia.org/wikipedia/commons/e/e0/Arabian_Peninsula_satellite_orthographic.jpg"
@@ -183,9 +183,9 @@ const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chap
 
   // Render "The Flood" view for Genesis 7
   const renderFloodMap = () => (
-    <div className="relative w-full h-full bg-[#1e3a8a] overflow-hidden">
+    <div className="relative w-full h-full bg-[#1e3a8a] overflow-hidden flex items-center justify-center">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.3)_0%,transparent_100%)] animate-pulse" />
-      <svg viewBox="0 0 1500 1000" className="w-full h-full relative z-10">
+      <svg viewBox="0 0 1500 1000" className="h-full w-auto max-w-full mx-auto block relative z-10" preserveAspectRatio="xMidYMid meet">
         <g transform="translate(750, 500)">
           <circle cx="0" cy="0" r="8" fill="#fff" className="shadow-lg" />
           <text x="0" y="40" textAnchor="middle" className="fill-blue-50 font-serif font-black text-xl uppercase tracking-widest drop-shadow-md">
@@ -213,9 +213,9 @@ const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chap
 
   // Render "The Ararat" view for Genesis 8
   const renderAraratMap = () => (
-    <div className="relative w-full h-full bg-[#fef3c7] overflow-hidden">
+    <div className="relative w-full h-full bg-[#fef3c7] overflow-hidden flex items-center justify-center">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.1)_0%,transparent_100%)]" />
-      <svg viewBox="0 0 1500 1000" className="w-full h-full relative z-10">
+      <svg viewBox="0 0 1500 1000" className="h-full w-auto max-w-full mx-auto block relative z-10" preserveAspectRatio="xMidYMid meet">
         <g transform="translate(750, 500)">
           {/* Mountain Silhouette */}
           <path d="M -200 150 L 0 -150 L 200 150 Z" fill="#d1d5db" opacity="0.8" />
@@ -247,9 +247,9 @@ const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chap
 
   // Render "The Nations" view for Genesis 9
   const renderNationsMap = () => (
-    <div className="relative w-full h-full bg-[#dcfce7] overflow-hidden">
+    <div className="relative w-full h-full bg-[#dcfce7] overflow-hidden flex items-center justify-center">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(34,197,94,0.05)_0%,transparent_100%)]" />
-      <svg viewBox="0 0 1500 1000" className="w-full h-full relative z-10">
+      <svg viewBox="0 0 1500 1000" className="h-full w-auto max-w-full mx-auto block relative z-10" preserveAspectRatio="xMidYMid meet">
         <defs>
           <linearGradient id="rainbowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
              <stop offset="0%" stopColor="#ef4444" />
@@ -298,8 +298,8 @@ const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chap
 
   // Render stylized "Garden of Eden" map for Genesis 2-6
   const renderCreationMap = () => (
-    <div className="relative w-full h-full bg-[#ecfccb] overflow-hidden">
-      <svg viewBox="0 0 1500 1000" className="w-full h-full">
+    <div className="relative w-full h-full bg-[#ecfccb] overflow-hidden flex items-center justify-center">
+      <svg viewBox="0 0 1500 1000" className="h-full w-auto max-w-full mx-auto block relative z-10" preserveAspectRatio="xMidYMid meet">
         <defs>
           <filter id="glow">
             <feGaussianBlur stdDeviation="5" result="coloredBlur"/>
@@ -427,7 +427,7 @@ const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chap
         <img 
           src={srcWithBuster} 
           alt={`${book} ${chapter} Map`}
-          className="absolute top-0 left-1/2 -translate-x-1/2 h-[140%] w-auto max-w-none select-none"
+          className="h-full w-auto object-contain select-none block mx-auto"
           onError={() => setImageLoadError(true)}
         />
       </div>
@@ -435,23 +435,25 @@ const OldTestamentMap: React.FC<OldTestamentMapProps> = ({ locations, book, chap
   };
 
   const renderHistoricalMap = () => (
-    <svg viewBox="0 0 1000 600" className="w-full h-full bg-[#fdf6e3]">
-      <path d="M0 200 Q 150 150, 200 0 L 0 0 Z" fill="#93c5fd" />
-      <path d="M300 600 Q 320 500, 350 450 T 400 400" stroke="#93c5fd" strokeWidth="40" fill="none" />
-      <path d="M800 600 Q 850 500, 950 450" stroke="#93c5fd" strokeWidth="40" fill="none" />
-      <text x="50" y="80" className="fill-stone-400 font-bold text-xs uppercase tracking-widest">Great Sea</text>
-      {locations.map((loc) => (
-        <g key={loc.id} className="cursor-pointer group">
-          <circle cx={loc.x * 10} cy={loc.y * 6} r="6" className="fill-amber-600 group-hover:fill-amber-400 transition-colors" />
-          <text x={loc.x * 10 + 10} y={loc.y * 6 + 4} className="fill-stone-700 font-bold text-[12px]">{loc.name}</text>
-        </g>
-      ))}
-    </svg>
+    <div className="relative w-full h-full bg-[#fdf6e3] overflow-hidden flex items-center justify-center">
+      <svg viewBox="0 0 1000 600" className="h-full w-auto max-w-full mx-auto block relative z-10 bg-[#fdf6e3]" preserveAspectRatio="xMidYMid meet">
+        <path d="M0 200 Q 150 150, 200 0 L 0 0 Z" fill="#93c5fd" />
+        <path d="M300 600 Q 320 500, 350 450 T 400 400" stroke="#93c5fd" strokeWidth="40" fill="none" />
+        <path d="M800 600 Q 850 500, 950 450" stroke="#93c5fd" strokeWidth="40" fill="none" />
+        <text x="50" y="80" className="fill-stone-400 font-bold text-xs uppercase tracking-widest">Great Sea</text>
+        {locations.map((loc) => (
+          <g key={loc.id} className="cursor-pointer group">
+            <circle cx={loc.x * 10} cy={loc.y * 6} r="6" className="fill-amber-600 group-hover:fill-amber-400 transition-colors" />
+            <text x={loc.x * 10 + 10} y={loc.y * 6 + 4} className="fill-stone-700 font-bold text-[12px]">{loc.name}</text>
+          </g>
+        ))}
+      </svg>
+    </div>
   );
 
   return (
-    <div className="relative w-full h-full overflow-hidden bg-stone-200">
-      <div className="absolute inset-0 transition-opacity duration-1000">
+    <div className="relative w-full h-full overflow-hidden bg-stone-200 flex items-center justify-center">
+      <div className="absolute inset-0 transition-opacity duration-1000 flex items-center justify-center">
         {(mapImageUrl && !imageLoadError) ? renderCustomImageMap() : (isUniverse ? renderUniverse() : isFlood ? renderFloodMap() : isArarat ? renderAraratMap() : isNations ? renderNationsMap() : (isGenesis10 || isGenesis11) ? renderGenesis10Map() : isGarden ? renderCreationMap() : renderHistoricalMap())}
       </div>
     </div>

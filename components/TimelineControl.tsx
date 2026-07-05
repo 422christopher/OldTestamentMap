@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 
 interface TimelineControlProps {
   currentYear: number;
@@ -39,74 +39,97 @@ const TimelineControl: React.FC<TimelineControlProps> = ({ currentYear }) => {
     label = `${currentYear} BC`;
   }
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      const container = containerRef.current;
+      const maxScroll = container.scrollWidth - container.clientWidth;
+      if (maxScroll > 0) {
+        // Since the timeline track is exactly 1000px wide, calculate pixel position of the progress marker
+        const markerPosition = (progress / 100) * 1000;
+        const targetScroll = markerPosition - container.clientWidth / 2;
+        container.scrollTo({
+          left: Math.max(0, Math.min(maxScroll, targetScroll)),
+          behavior: 'smooth'
+        });
+      }
+    }
+  }, [progress]);
+
   return (
-    <div className="w-full px-8 py-6 bg-white/80 backdrop-blur-md border-t border-stone-200">
-      <div className="max-w-6xl mx-auto flex flex-col items-center">
-        
-        {/* Timeline Container */}
-        <div className="w-full h-8 relative flex items-center mb-2">
+    <div className="w-full bg-white/90 backdrop-blur-md border-t border-stone-200 shadow-sm select-none">
+      <div 
+        ref={containerRef}
+        className="w-full overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden py-6 px-8"
+      >
+        <div className="w-[1000px] mx-auto flex flex-col items-center relative">
           
-          {/* THE TRACK */}
-          <div className="absolute w-full h-1.5 flex items-center">
-            {/* Dashed Section (0-15%) */}
-            <div className="w-[15%] h-full relative overflow-hidden">
-               <div className="absolute inset-0 border-b-4 border-dashed border-stone-300 -top-1"></div>
+          {/* Timeline Container */}
+          <div className="w-full h-8 relative flex items-center mb-2">
+            
+            {/* THE TRACK */}
+            <div className="absolute w-full h-1.5 flex items-center">
+              {/* Dashed Section (0-15%) */}
+              <div className="w-[15%] h-full relative overflow-hidden">
+                 <div className="absolute inset-0 border-b-4 border-dashed border-stone-300 -top-1"></div>
+              </div>
+              {/* Solid Section (15-100%) */}
+              <div className="flex-1 h-full bg-stone-200 rounded-r-full"></div>
             </div>
-            {/* Solid Section (15-100%) */}
-            <div className="flex-1 h-full bg-stone-200 rounded-r-full"></div>
+
+            {/* PROGRESS FILL */}
+            <div className="absolute h-1.5 flex items-center pointer-events-none z-10 overflow-hidden" style={{ width: `${progress}%` }}>
+               <div className="w-full h-full bg-amber-600 rounded-full shadow-[0_0_10px_rgba(217,119,6,0.4)] transition-all duration-1000 ease-in-out"></div>
+            </div>
+
+            {/* GAP MARKER */}
+            <div className="absolute left-[15%] h-4 w-0.5 bg-stone-400 z-20"></div>
+
+            {/* INDICATOR DOT */}
+            <div 
+              className="absolute z-30 transition-all duration-1000 ease-in-out flex flex-col items-center -translate-x-1/2"
+              style={{ left: `${progress}%` }}
+            >
+              <div className="w-4 h-4 bg-amber-600 rounded-full border-2 border-white shadow-md"></div>
+            </div>
           </div>
 
-          {/* PROGRESS FILL */}
-          <div className="absolute h-1.5 flex items-center pointer-events-none z-10 overflow-hidden" style={{ width: `${progress}%` }}>
-             <div className="w-full h-full bg-amber-600 rounded-full shadow-[0_0_10px_rgba(217,119,6,0.4)] transition-all duration-1000 ease-in-out"></div>
+          {/* LABELS ROW */}
+          <div className="flex w-full text-[10px] font-black tracking-widest text-stone-400 uppercase relative h-14">
+            
+            {/* STATIC MARKERS */}
+            <div className={`absolute left-0 top-0 transition-opacity duration-300 ${isCreation ? 'opacity-0' : 'opacity-100'}`}>
+              Creation
+            </div>
+
+            <div className={`absolute left-[9.5%] -translate-x-1/2 top-0 transition-opacity duration-300 ${isNoah ? 'opacity-0' : 'opacity-100'}`}>
+              Noah
+            </div>
+            
+            <div className={`absolute left-[15%] -translate-x-1/2 text-stone-500 top-0 transition-opacity duration-300 ${is2000 ? 'opacity-0' : 'opacity-100'}`}>
+              2000 BC
+            </div>
+            
+            <div className={`absolute right-0 text-right top-0 transition-opacity duration-300 ${is400 ? 'opacity-0' : 'opacity-100'}`}>
+              400 BC
+            </div>
+
+            {/* HIGHLIGHTED CURRENT POSITION */}
+            <div 
+              className={`absolute text-amber-600 font-black transition-all duration-1000 ease-in-out whitespace-nowrap leading-none top-6 ${isNoah ? 'text-[24px] scale-110' : 'text-[18px]'}`}
+              style={{ 
+                left: `${progress}%`, 
+                transform: progress === 0 ? 'translateX(0)' : progress === 100 ? 'translateX(-100%)' : 'translateX(-50%)' 
+              }}
+            >
+              {label}
+            </div>
           </div>
 
-          {/* GAP MARKER */}
-          <div className="absolute left-[15%] h-4 w-0.5 bg-stone-400 z-20"></div>
-
-          {/* INDICATOR DOT */}
-          <div 
-            className="absolute z-30 transition-all duration-1000 ease-in-out flex flex-col items-center -translate-x-1/2"
-            style={{ left: `${progress}%` }}
-          >
-            <div className="w-4 h-4 bg-amber-600 rounded-full border-2 border-white shadow-md"></div>
+          <div className="mt-2 text-[9px] text-stone-400 font-serif italic uppercase tracking-wider opacity-60">
+            All dates and locations are approximates
           </div>
-        </div>
-
-        {/* LABELS ROW */}
-        <div className="flex w-full text-[10px] font-black tracking-widest text-stone-400 uppercase relative h-14">
-          
-          {/* STATIC MARKERS */}
-          <div className={`absolute left-0 top-0 transition-opacity duration-300 ${isCreation ? 'opacity-0' : 'opacity-100'}`}>
-            Creation
-          </div>
-
-          <div className={`absolute left-[9.5%] -translate-x-1/2 top-0 transition-opacity duration-300 ${isNoah ? 'opacity-0' : 'opacity-100'}`}>
-            Noah
-          </div>
-          
-          <div className={`absolute left-[15%] -translate-x-1/2 text-stone-500 top-0 transition-opacity duration-300 ${is2000 ? 'opacity-0' : 'opacity-100'}`}>
-            2000 BC
-          </div>
-          
-          <div className={`absolute right-0 text-right top-0 transition-opacity duration-300 ${is400 ? 'opacity-0' : 'opacity-100'}`}>
-            400 BC
-          </div>
-
-          {/* HIGHLIGHTED CURRENT POSITION */}
-          <div 
-            className={`absolute text-amber-600 font-black transition-all duration-1000 ease-in-out whitespace-nowrap leading-none top-6 ${isNoah ? 'text-[24px] scale-110' : 'text-[18px]'}`}
-            style={{ 
-              left: `${progress}%`, 
-              transform: progress === 0 ? 'translateX(0)' : progress === 100 ? 'translateX(-100%)' : 'translateX(-50%)' 
-            }}
-          >
-            {label}
-          </div>
-        </div>
-
-        <div className="mt-2 text-[9px] text-stone-400 font-serif italic uppercase tracking-wider opacity-60">
-          All dates and locations are approximates
         </div>
       </div>
     </div>

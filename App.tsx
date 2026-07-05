@@ -51,9 +51,9 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-stone-50">
-      <main className="relative flex-1 flex flex-col overflow-hidden">
-        <div className="flex-1 relative">
+    <div className="flex flex-col h-screen w-screen bg-stone-50 overflow-y-auto md:overflow-hidden select-none">
+      <main className="relative flex-1 flex flex-col min-h-max">
+        <div className="h-[calc(100vh-218px)] md:h-auto md:flex-1 relative w-full">
           {loading && (
             <div className="absolute inset-0 z-50 flex items-center justify-center bg-stone-50/50 backdrop-blur-sm transition-all duration-300">
               <div className="flex flex-col items-center">
@@ -73,7 +73,7 @@ const App: React.FC = () => {
           />
         </div>
 
-        <div className="z-40">
+        <div className="z-40 flex flex-col shrink-0">
           <TimelineControl 
             currentYear={displayYear} 
           />
